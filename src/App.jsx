@@ -21,7 +21,7 @@ const PORTFOLIO_DATA = {
   videos: [
     { 
       id: 1, 
-      title: "星球大战", 
+      title: "星球大战混剪", 
       url: "https://github.com/1679646067-droid/-/raw/refs/heads/main/166.MP4", 
       thumbnail: "https://github.com/1679646067-droid/-/blob/main/IMG_0986.JPG?raw=true" 
     },
@@ -62,38 +62,37 @@ const PORTFOLIO_DATA = {
       url: "https://github.com/1679646067-droid/peel/raw/refs/heads/main/别问很可怕（网页上传版）.mp3" 
     },
   ],
-  // 短视频页面数据重构：每个平台支持多个视频翻页
   shorts: [
     { 
       id: 1, 
       platform: "抖音", 
       videos: [
-        { vId: 101, likes: "12.8w", plays: "105w", shares: "3.2w", title: "AI换脸特效展示", url: "https://www.w3schools.com/html/mov_bbb.mp4" },
-        { vId: 102, likes: "5.4w", plays: "30w", shares: "1.1w", title: "赛博迷幻视觉", url: "https://www.w3schools.com/html/movie.mp4" }
+        { vId: 101, likes: "116.0w", plays: "2.4w", shares: "2.7w", title: "体育类VLOG", url: "https://github.com/1679646067-droid/peel/raw/refs/heads/main/扣篮.mp4" },
+        { vId: 102, likes: "42.1w", plays: "126", shares: "4374", title: "体育类剧情", url: "https://github.com/1679646067-droid/peel/raw/refs/heads/main/剧情.mp4" }
       ]
     },
     { 
       id: 2, 
       platform: "小红书", 
       videos: [
-        { vId: 201, likes: "5.6k", plays: "20w", shares: "1.1k", title: "Suno创作教学", url: "https://www.w3schools.com/html/movie.mp4" },
-        { vId: 202, likes: "9.2k", plays: "45w", shares: "3.5k", title: "干货分享", url: "https://www.w3schools.com/html/mov_bbb.mp4" }
+        { vId: 201, likes: "3.5k", plays: "260", shares: "776", title: "出海营销案例", url: "https://github.com/1679646067-droid/peel/raw/refs/heads/main/小红书%202.MP4" },
+        { vId: 202, likes: "24k", plays: "4", shares: "86", title: "toc产品介绍视频", url: "https://github.com/1679646067-droid/peel/raw/refs/heads/main/小蜜蜂慕斯卡托.mp4" }
       ]
     },
     { 
       id: 3, 
       platform: "视频号", 
       videos: [
-        { vId: 301, likes: "8.2k", plays: "45w", shares: "2.5k", title: "可灵AI视频大片", url: "https://www.w3schools.com/html/mov_bbb.mp4" },
-        { vId: 302, likes: "1.2w", plays: "60w", shares: "4.1k", title: "超清画质重制", url: "https://www.w3schools.com/html/movie.mp4" }
+        { vId: 301, likes: "-", plays: "-", shares: "-", title: "MG动画展示商业案例", url: "https://github.com/1679646067-droid/peel/raw/refs/heads/main/录音笔.mp4" },
+        { vId: 302, likes: "-", plays: "-", shares: "-", title: "实录活动VLOG", url: "https://github.com/1679646067-droid/peel/raw/refs/heads/main/北京晚宴.mp4" }
       ]
     }
   ]
 };
 
-const LEGAL_NOTICE = "本影片、音乐、特效全采用AI 技术生成，所有产权均为PEEL一人，擅自盗用作者视频，将会采取法律途径维权";
+const LEGAL_NOTICE = "本影片、音乐、特效全采用AI 技术生成，擅自盗用作者视频，将会采取法律途径维权";
 
-// --- 光标交互组件 (增加吸附和磁性交互) ---
+// --- 光标交互组件 ---
 const CustomCursor = () => {
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [isClicking, setIsClicking] = useState(false);
@@ -104,7 +103,6 @@ const CustomCursor = () => {
     const down = () => setIsClicking(true);
     const up = () => setIsClicking(false);
     
-    // 监听交互元素的悬浮状态
     const handleMouseOver = (e) => {
       if (['A', 'BUTTON', 'INPUT', 'TEXTAREA'].includes(e.target.tagName) || e.target.closest('button')) {
         setIsHovering(true);
@@ -196,10 +194,6 @@ const VideoPage = () => {
     }
   }, [isPlaying, currentVideo]);
 
-  useEffect(() => {
-    if (videoRef.current) videoRef.current.muted = isMuted;
-  }, [isMuted, currentVideo]);
-
   const togglePlay = () => setIsPlaying(!isPlaying);
   const toggleMute = (e) => { e.stopPropagation(); setIsMuted(!isMuted); };
   const handleTimeUpdate = () => {
@@ -222,15 +216,12 @@ const VideoPage = () => {
         <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 scale-105 animate-[pulse_10s_ease-in-out_infinite]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=2000')" }} />
       </div>
 
-      {/* 新增：PEEL的创作空间 标题 */}
       <div className="relative z-10 max-w-6xl w-full mb-10 text-center">
         <h1 className="text-4xl md:text-5xl font-extralight tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 drop-shadow-[0_0_15px_rgba(34,211,238,0.3)]">PEEL的创作空间</h1>
       </div>
 
       <div className="relative z-10 max-w-6xl w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
         <div className="lg:col-span-3 group relative aspect-video rounded-3xl overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(34,211,238,0.15)] bg-black transition-transform duration-700 hover:scale-[1.01]">
-          
-          {/* 修改: AIGC 平台标识 Badge 改为可点击跳转 */}
           <a 
             href={PORTFOLIO_DATA.tapnewUrl}
             target="_blank"
@@ -241,7 +232,7 @@ const VideoPage = () => {
             <span className="text-[10px] tracking-widest text-cyan-50 uppercase font-bold">本作品由 TapNew 提供的工作流平台制作</span>
           </a>
 
-          <video ref={videoRef} key={currentVideo.url} src={currentVideo.url} className="w-full h-full object-cover cursor-pointer" onClick={togglePlay} onTimeUpdate={handleTimeUpdate} playsInline />
+          <video ref={videoRef} key={currentVideo.url} src={currentVideo.url} className="w-full h-full object-cover cursor-pointer" onClick={togglePlay} onTimeUpdate={handleTimeUpdate} muted={isMuted} playsInline />
           
           {!isPlaying && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 transition-opacity pointer-events-none z-20">
@@ -284,20 +275,13 @@ const VideoPage = () => {
                   : 'bg-white/5 border-white/5 hover:border-white/20 hover:-translate-y-1 hover:shadow-xl'
               }`}
             >
-              {currentVideo.id === v.id && (
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-transparent w-1/2 h-full skew-x-12 translate-x-[-100%] animate-[slideRight_2s_infinite]" />
-              )}
               <div className="w-16 h-10 bg-zinc-800 rounded-md overflow-hidden shrink-0 relative">
                 <img src={v.thumbnail} className="w-full h-full object-cover group-hover/btn:scale-110 transition-transform duration-500" />
-                {currentVideo.id === v.id && <div className="absolute inset-0 bg-cyan-500/20" />}
               </div>
-              <span className={`text-xs font-light truncate transition-colors ${currentVideo.id === v.id ? 'text-cyan-300 font-bold' : 'text-gray-300'}`}>{v.title}</span>
+              <span className={`text-xs font-light truncate ${currentVideo.id === v.id ? 'text-cyan-300 font-bold' : 'text-gray-300'}`}>{v.title}</span>
             </button>
           ))}
         </div>
-      </div>
-      <div className="mt-20 text-center max-w-2xl px-4">
-        <p className="text-[10px] text-gray-500 leading-relaxed tracking-widest uppercase opacity-60 italic">{LEGAL_NOTICE}</p>
       </div>
     </div>
   );
@@ -311,8 +295,8 @@ const MusicPage = () => {
 
   useEffect(() => {
     if (audioRef.current) {
-      if (isPlaying) { audioRef.current.play().catch(() => setIsPlaying(false)); } 
-      else { audioRef.current.pause(); }
+      if (isPlaying) audioRef.current.play().catch(() => setIsPlaying(false));
+      else audioRef.current.pause();
     }
   }, [isPlaying, currentTrack]);
 
@@ -329,77 +313,66 @@ const MusicPage = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden flex items-center justify-center transition-all duration-1000 bg-black">
+    <div className="min-h-screen relative overflow-hidden flex items-center justify-center bg-black">
       <audio ref={audioRef} src={currentTrack.url} onEnded={handleNext} />
       <div className={`absolute inset-0 transition-all duration-[3000ms] scale-110 blur-[60px] opacity-40 ${isPlaying ? 'scale-125' : ''}`} style={{ backgroundImage: `url(${currentTrack.cover})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-      
       <div className="relative z-10 w-full max-w-5xl px-8 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
         <div className="flex flex-col items-center group">
-          <div className={`relative w-64 h-64 md:w-80 md:h-80 rounded-full border-[12px] border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden transition-transform duration-700 group-hover:scale-105 ${isPlaying ? 'animate-[spin_15s_linear_infinite]' : ''}`}>
-            {/* 移除了内嵌圆孔和模糊效果，全尺寸展示封面图 */}
+          <div className={`relative w-64 h-64 md:w-80 md:h-80 rounded-full border-[12px] border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden transition-transform duration-700 ${isPlaying ? 'animate-[spin_15s_linear_infinite]' : ''}`}>
             <img src={currentTrack.cover} className="w-full h-full object-cover" />
           </div>
-          <div className="mt-12 text-center transition-transform duration-500 group-hover:-translate-y-2">
-            <h2 className="text-3xl font-light tracking-tighter text-white mb-2 drop-shadow-lg">{currentTrack.title}</h2>
+          <div className="mt-12 text-center">
+            <h2 className="text-3xl font-light tracking-tighter text-white mb-2">{currentTrack.title}</h2>
             <p className="text-pink-400 tracking-[0.4em] text-[10px] uppercase font-bold">{currentTrack.artist}</p>
           </div>
         </div>
-
-        <div className="bg-white/5 backdrop-blur-[40px] p-8 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden">
-          {/* 流光特效边框 */}
-          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-pink-500 to-transparent opacity-50" />
-          
+        <div className="bg-white/5 backdrop-blur-[40px] p-8 rounded-3xl border border-white/10 shadow-2xl">
           <div className="flex justify-center gap-10 items-center mb-12 text-white">
-            <button onClick={handlePrev} className="text-gray-400 hover:text-white hover:scale-110 transition-all"><SkipBack size={28} /></button>
-            <button onClick={togglePlay} className="w-20 h-20 rounded-full bg-white text-black flex items-center justify-center hover:bg-pink-400 hover:text-white transition-all transform active:scale-90 shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:shadow-[0_0_40px_rgba(236,72,153,0.5)]">
+            <button onClick={handlePrev} className="text-gray-400 hover:text-white transition-all"><SkipBack size={28} /></button>
+            <button onClick={togglePlay} className="w-20 h-20 rounded-full bg-white text-black flex items-center justify-center hover:bg-pink-400 hover:text-white transition-all shadow-xl">
               {isPlaying ? <Pause size={32} /> : <Play size={32} fill="currentColor" className="ml-1" />}
             </button>
-            <button onClick={handleNext} className="text-gray-400 hover:text-white hover:scale-110 transition-all"><SkipForward size={28} /></button>
+            <button onClick={handleNext} className="text-gray-400 hover:text-white transition-all"><SkipForward size={28} /></button>
           </div>
-
           <div className="space-y-3 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
-            {PORTFOLIO_DATA.music.map((m, idx) => (
-              <div 
-                key={m.id} 
-                onClick={() => { setCurrentTrack(m); setIsPlaying(true); }} 
-                className={`flex items-center justify-between p-4 rounded-2xl cursor-pointer transition-all duration-300 group/item ${
-                  currentTrack.id === m.id 
-                    ? 'bg-gradient-to-r from-pink-500/20 to-transparent text-pink-400 border border-pink-500/30 shadow-lg' 
-                    : 'text-gray-400 hover:bg-white/5 hover:translate-x-2 border border-transparent'
-                }`}
-              >
-                <div className="flex items-center gap-5">
-                  <span className={`text-[10px] font-mono italic ${currentTrack.id === m.id ? 'opacity-100 text-pink-300' : 'opacity-30'}`}>
-                    0{idx + 1}
-                  </span>
-                  <span className={`text-sm font-light ${currentTrack.id === m.id ? 'font-medium' : ''}`}>{m.title}</span>
-                </div>
-                {currentTrack.id === m.id && isPlaying && (
-                  <div className="flex gap-[3px] items-end h-4 mr-2">
-                    <div className="w-1 bg-pink-400 rounded-t-sm animate-[bounce_0.8s_infinite_0s]" style={{height:'40%'}} />
-                    <div className="w-1 bg-pink-400 rounded-t-sm animate-[bounce_0.8s_infinite_0.2s]" style={{height:'100%'}} />
-                    <div className="w-1 bg-pink-400 rounded-t-sm animate-[bounce_0.8s_infinite_0.4s]" style={{height:'60%'}} />
-                  </div>
-                )}
+            {PORTFOLIO_DATA.music.map((m) => (
+              <div key={m.id} onClick={() => { setCurrentTrack(m); setIsPlaying(true); }} className={`flex items-center justify-between p-4 rounded-2xl cursor-pointer transition-all ${currentTrack.id === m.id ? 'bg-pink-500/20 text-pink-400 border border-pink-500/30' : 'text-gray-400 hover:bg-white/5'}`}>
+                <span className="text-sm font-light">{m.title}</span>
               </div>
             ))}
           </div>
         </div>
       </div>
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-center w-full px-4">
-        <p className="text-[10px] text-white/30 tracking-widest uppercase italic">{LEGAL_NOTICE}</p>
-      </div>
     </div>
   );
 };
 
-// --- 短视频卡片组件 (独立管理翻页和播放状态) ---
+// --- 修补后的短视频卡片组件 ---
 const ShortsCard = ({ platformData }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef(null);
   const videos = platformData.videos;
   const currentVideo = videos[currentIndex];
+
+  // 监听播放状态改变
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.play().catch(e => {
+          console.warn("Autoplay blocked:", e);
+          setIsPlaying(false);
+        });
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, [isPlaying, currentIndex]);
+
+  const togglePlay = (e) => {
+    e.stopPropagation();
+    setIsPlaying(!isPlaying);
+  };
 
   const handleNext = (e) => {
     e.stopPropagation();
@@ -414,67 +387,62 @@ const ShortsCard = ({ platformData }) => {
   };
 
   return (
-    <div className="w-full max-w-[320px] mx-auto flex flex-col group/card perspective-1000">
+    <div className="w-full max-w-[320px] mx-auto flex flex-col group/card">
       <div className="flex justify-between items-center mb-4 px-2">
         <span className="text-[10px] font-bold tracking-widest text-white/60 uppercase group-hover/card:text-orange-400 transition-colors">{platformData.platform}</span>
-        <div className="flex gap-1 items-center">
-          <span className="text-[8px] font-mono text-gray-500 mr-2">{currentIndex + 1} / {videos.length}</span>
-          <div className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
-          <div className="w-1.5 h-1.5 rounded-full bg-orange-500/30" />
-        </div>
+        <span className="text-[8px] font-mono text-gray-500">{currentIndex + 1} / {videos.length}</span>
       </div>
 
       <div 
-        className="aspect-[9/16] bg-zinc-950 rounded-[2rem] border-[4px] border-zinc-800 overflow-hidden relative shadow-2xl transition-all duration-500 group-hover/card:-translate-y-2 group-hover/card:shadow-[0_20px_50px_rgba(249,115,22,0.15)] cursor-pointer"
-        onClick={() => setIsPlaying(!isPlaying)}
+        className="aspect-[9/16] bg-zinc-950 rounded-[2rem] border-[4px] border-zinc-800 overflow-hidden relative shadow-2xl transition-all duration-500 group-hover/card:-translate-y-2 cursor-pointer"
+        onClick={togglePlay}
       >
         <video 
-          key={currentVideo.url} // 强迫重新加载
+          ref={videoRef}
+          key={currentVideo.url}
           src={currentVideo.url} 
-          className="w-full h-full object-cover transition-opacity duration-500"
-          autoPlay={isPlaying}
+          className="w-full h-full object-cover"
           loop
-          muted={false}
           playsInline
         />
 
-        {/* 翻页控制区 (右侧边缘悬浮) */}
+        {/* 翻页控制 */}
         {videos.length > 1 && (
-          <div className="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-30 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 translate-x-4 group-hover/card:translate-x-0">
-            <button onClick={handlePrev} className="p-2 bg-black/40 backdrop-blur-md rounded-full text-white/60 hover:text-white hover:bg-black/80 hover:scale-110 transition-all shadow-lg border border-white/10">
+          <div className="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-30 opacity-0 group-hover/card:opacity-100 transition-opacity">
+            <button onClick={handlePrev} className="p-2 bg-black/40 backdrop-blur-md rounded-full text-white/60 hover:text-white border border-white/10">
               <ChevronUp size={18} />
             </button>
-            <button onClick={handleNext} className="p-2 bg-black/40 backdrop-blur-md rounded-full text-white/60 hover:text-white hover:bg-black/80 hover:scale-110 transition-all shadow-lg border border-white/10">
+            <button onClick={handleNext} className="p-2 bg-black/40 backdrop-blur-md rounded-full text-white/60 hover:text-white border border-white/10">
               <ChevronDown size={18} />
             </button>
           </div>
         )}
 
+        {/* 播放按钮叠加层 */}
         {!isPlaying && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 backdrop-blur-[2px] transition-opacity">
-            <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 group-hover/card:scale-110 transition-transform">
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[1px] z-20 pointer-events-none">
+            <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
               <Play className="text-white ml-1" size={32} fill="white" />
             </div>
           </div>
         )}
         
-        <div className="absolute right-3 bottom-6 flex flex-col gap-6 items-center bg-black/40 backdrop-blur-md p-3 rounded-full border border-white/10 z-20 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-          <div className="flex flex-col items-center group/icon hover:-translate-y-1 transition-transform">
-            <Heart size={20} className="mb-1 text-white/80 group-hover/icon:text-red-500 transition-colors drop-shadow-md" />
-            <span className="text-[10px] font-mono text-white/90">{currentVideo.likes}</span>
+        <div className="absolute right-3 bottom-6 flex flex-col gap-6 items-center bg-black/40 backdrop-blur-md p-3 rounded-full border border-white/10 z-20">
+          <div className="flex flex-col items-center">
+            <Heart size={18} className="mb-1 text-white/80" />
+            <span className="text-[8px] font-mono">{currentVideo.likes}</span>
           </div>
-          <div className="flex flex-col items-center group/icon hover:-translate-y-1 transition-transform">
-            <MessageCircle size={20} className="mb-1 text-white/80 group-hover/icon:text-orange-400 transition-colors drop-shadow-md" />
-            <span className="text-[10px] font-mono text-white/90">{currentVideo.plays}</span>
+          <div className="flex flex-col items-center">
+            <MessageCircle size={18} className="mb-1 text-white/80" />
+            <span className="text-[8px] font-mono">{currentVideo.plays}</span>
           </div>
-          <div className="flex flex-col items-center group/icon hover:-translate-y-1 transition-transform">
-            <Share2 size={20} className="mb-1 text-white/80 group-hover/icon:text-blue-400 transition-colors drop-shadow-md" />
-            <span className="text-[10px] font-mono text-white/90">{currentVideo.shares}</span>
+          <div className="flex flex-col items-center">
+            <Share2 size={18} className="mb-1 text-white/80" />
+            <span className="text-[8px] font-mono">{currentVideo.shares}</span>
           </div>
         </div>
       </div>
-      
-      <p className="mt-5 text-center text-sm font-light text-gray-400 tracking-widest uppercase transition-colors group-hover/card:text-white">{currentVideo.title}</p>
+      <p className="mt-5 text-center text-xs font-light text-gray-400 tracking-widest uppercase truncate">{currentVideo.title}</p>
     </div>
   );
 }
@@ -482,17 +450,14 @@ const ShortsCard = ({ platformData }) => {
 const ShortsPage = () => {
   return (
     <div className="min-h-screen relative text-white pt-32 pb-20 flex flex-col items-center overflow-hidden bg-[#050505]">
-      {/* 流媒体风格环境光背景 */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-orange-600/20 rounded-full blur-[120px] animate-[pulse_8s_ease-in-out_infinite]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-fuchsia-600/20 rounded-full blur-[150px] animate-[pulse_10s_ease-in-out_infinite_2s]" />
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-20">
+        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-orange-600 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-fuchsia-600 rounded-full blur-[150px]" />
       </div>
-
       <div className="relative z-10 mb-16 text-center">
-        <h2 className="text-lg tracking-widest text-orange-400 uppercase font-bold mb-4 drop-shadow-[0_0_10px_rgba(249,115,22,0.5)]">国内流媒体平台作品</h2>
+        <h2 className="text-lg tracking-widest text-orange-400 uppercase font-bold mb-4">国内流媒体平台作品</h2>
         <div className="h-[2px] w-24 bg-gradient-to-r from-transparent via-orange-500 to-transparent mx-auto opacity-70" />
       </div>
-
       <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 px-6 max-w-7xl w-full">
         {PORTFOLIO_DATA.shorts.map((platformData) => (
           <ShortsCard key={platformData.id} platformData={platformData} />
@@ -502,12 +467,10 @@ const ShortsPage = () => {
   );
 };
 
-// --- 联系页面 (极简重构 & 复制功能) ---
+// --- 联系页面 ---
 const ContactPage = () => {
   const [copied, setCopied] = useState(null);
-
   const handleCopy = (text, label) => {
-    // 兼容浏览器复制
     const textArea = document.createElement("textarea");
     textArea.value = text;
     document.body.appendChild(textArea);
@@ -516,9 +479,7 @@ const ContactPage = () => {
       document.execCommand('copy');
       setCopied(label);
       setTimeout(() => setCopied(null), 2000);
-    } catch (err) {
-      console.error('Copy failed', err);
-    }
+    } catch (err) {}
     document.body.removeChild(textArea);
   };
 
@@ -529,40 +490,19 @@ const ContactPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white flex flex-col items-center justify-center p-6 relative overflow-hidden">
-      {/* 极简网格背景 */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-50 pointer-events-none" />
-
-      <div className="relative z-10 w-full max-w-4xl flex flex-col items-center text-center mt-[-10vh]">
-        <h2 className="text-6xl md:text-8xl font-extralight tracking-tighter mb-20 italic text-white/90 drop-shadow-2xl hover:scale-105 transition-transform duration-700 select-none cursor-default">
-          Let's <span className="font-serif italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-pink-500">Create.</span>
+    <div className="min-h-screen bg-[#050505] text-white flex flex-col items-center justify-center p-6 relative">
+      <div className="relative z-10 w-full max-w-4xl flex flex-col items-center text-center">
+        <h2 className="text-6xl md:text-8xl font-extralight tracking-tighter mb-20 italic">
+          Let's <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-pink-500">Create.</span>
         </h2>
-        
-        <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center justify-center w-full">
+        <div className="flex flex-col md:flex-row gap-8 items-center justify-center w-full">
           {contactItems.map((item, idx) => (
-            <div 
-              key={idx}
-              onClick={() => handleCopy(item.value, item.label)}
-              className="group relative flex flex-col items-center gap-4 cursor-pointer p-6 rounded-3xl hover:bg-white/5 border border-transparent hover:border-white/10 transition-all duration-300 w-full md:w-auto"
-            >
-              <div className="w-16 h-16 rounded-full border border-white/10 bg-black/50 backdrop-blur-md flex items-center justify-center group-hover:bg-white group-hover:text-black group-hover:scale-110 transition-all duration-500 shadow-xl relative overflow-hidden">
-                {copied === item.label ? <Check size={24} className="text-green-500" /> : <item.icon size={24} />}
-                
-                {/* 点击水波纹效果 */}
-                {copied === item.label && (
-                  <div className="absolute inset-0 bg-green-400/30 animate-[ping_0.5s_cubic-bezier(0,0,0.2,1)_1]" />
-                )}
+            <div key={idx} onClick={() => handleCopy(item.value, item.label)} className="group flex flex-col items-center gap-4 cursor-pointer p-6 rounded-3xl hover:bg-white/5 transition-all">
+              <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
+                {copied === item.label ? <Check size={24} /> : <item.icon size={24} />}
               </div>
-              
-              <div className="flex flex-col items-center">
-                <p className="text-[10px] uppercase tracking-[0.3em] text-gray-500 mb-2 transition-colors group-hover:text-gray-300">{item.label}</p>
-                <div className="flex items-center gap-2">
-                  <p className="text-sm md:text-base font-light tracking-wider opacity-80 group-hover:opacity-100 transition-opacity">
-                    {copied === item.label ? <span className="text-green-400 font-medium">COPIED!</span> : item.value}
-                  </p>
-                  {copied !== item.label && <Copy size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />}
-                </div>
-              </div>
+              <p className="text-[10px] uppercase tracking-[0.3em] text-gray-500">{item.label}</p>
+              <p className="text-sm font-light opacity-80">{copied === item.label ? "COPIED!" : item.value}</p>
             </div>
           ))}
         </div>
@@ -571,48 +511,23 @@ const ContactPage = () => {
   );
 };
 
-// --- 主程序入口 ---
 export default function App() {
   const [activeTab, setActiveTab] = useState('video');
-
   return (
-    <div className="font-sans select-none selection:bg-cyan-500/30 overflow-x-hidden cursor-default md:cursor-none">
+    <div className="font-sans select-none overflow-x-hidden bg-black">
       <CustomCursor />
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
-      
       <main className="transition-opacity duration-500">
         {activeTab === 'video' && <VideoPage />}
         {activeTab === 'music' && <MusicPage />}
         {activeTab === 'shorts' && <ShortsPage />}
         {activeTab === 'contact' && <ContactPage />}
       </main>
-
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;700&family=Playfair+Display:ital@1&display=swap');
-        
-        body {
-          margin: 0;
-          padding: 0;
-          background: #000;
-          font-family: 'Inter', sans-serif;
-          color: white;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 10px;
-        }
-
-        @keyframes slideRight {
-          0% { transform: translateX(-100%) skewX(12deg); }
-          100% { transform: translateX(200%) skewX(12deg); }
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;700&display=swap');
+        body { margin: 0; background: #000; font-family: 'Inter', sans-serif; color: white; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
       `}</style>
     </div>
   );
