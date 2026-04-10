@@ -7,14 +7,11 @@ import {
 } from 'lucide-react';
 
 // ==========================================
-// --- 数据配置区 (在此修改背景和内容) ---
+// --- 数据配置区 ---
 // ==========================================
 const PORTFOLIO_DATA = {
   author: "PEEL",
-  
-  // 背景图：数字艺术空间
   backgroundImage: "https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070&auto=format&fit=crop", 
-  
   contact: {
     email: "1679646067@qq.com", 
     wechat: "sfmsongfm",            
@@ -42,8 +39,8 @@ const PORTFOLIO_DATA = {
 
 const LEGAL_NOTICE = "本影片、音乐、特效全采用AI 技术生成，擅自盗用作者视频，将会采取法律途径维权";
 
-// --- 动画进入组件 ---
-const FadeInSection = ({ children, delay = "0ms" }) => {
+// --- 动画进入组件 【已修复：增加 className 参数接收并渲染】 ---
+const FadeInSection = ({ children, delay = "0ms", className = "" }) => {
   const [isVisible, setVisible] = useState(false);
   const domRef = useRef();
 
@@ -60,7 +57,7 @@ const FadeInSection = ({ children, delay = "0ms" }) => {
   return (
     <div 
       ref={domRef} 
-      className={`transition-all duration-[1200ms] ease-[cubic-bezier(0.25,1,0.5,1)] ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`}
+      className={`transition-all duration-[1200ms] ease-[cubic-bezier(0.25,1,0.5,1)] ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'} ${className}`}
       style={{ transitionDelay: delay }}
     >
       {children}
@@ -163,42 +160,43 @@ const VideoSection = () => {
   }, [isPlaying, currentVideo]);
 
   return (
-    <section id="video" className="min-h-screen pt-40 pb-32 px-4 flex flex-col items-center relative z-10">
-      <FadeInSection>
-        <h1 className="text-6xl md:text-[7rem] font-light italic tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-600 mb-16 text-center uppercase px-4 drop-shadow-2xl">
+    <section id="video" className="min-h-screen pt-40 pb-32 px-4 md:px-12 flex flex-col items-center relative z-10">
+      <FadeInSection className="w-full flex justify-center">
+        <h1 className="text-6xl md:text-[7rem] font-light italic tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-600 mb-16 text-center uppercase drop-shadow-2xl">
           PEEL 创意工坊
         </h1>
       </FadeInSection>
 
-      {/* 【优化点】：使用 max-w-[1600px] 巨幕容器，采用 12 列网格分配比例 9:3 */}
-      <div className="max-w-[95vw] 2xl:max-w-[1600px] w-full grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
-        <FadeInSection delay="200ms" className="lg:col-span-9">
-          <div className={`aspect-video rounded-[2.5rem] overflow-hidden border border-white/10 bg-black relative group shadow-[0_30px_80px_rgba(0,0,0,0.8)] transition-all duration-500 ${isTransitioning ? 'opacity-0 scale-[0.98] blur-sm' : 'opacity-100 scale-100 blur-none'}`}>
+      {/* 这里的布局逻辑现在会完美生效：大屏下分成 12 列，视频占据 9 列，列表占据 3 列 */}
+      <div className="max-w-[1800px] w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        
+        <FadeInSection delay="200ms" className="lg:col-span-9 w-full">
+          <div className={`w-full aspect-video rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/10 bg-black relative group shadow-[0_30px_80px_rgba(0,0,0,0.8)] transition-all duration-500 ${isTransitioning ? 'opacity-0 scale-[0.98] blur-sm' : 'opacity-100 scale-100 blur-none'}`}>
             <video ref={videoRef} key={currentVideo.url} src={currentVideo.url} className="w-full h-full object-cover" muted={isMuted} loop playsInline />
             <div className="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/30 transition-all cursor-pointer" onClick={() => setIsPlaying(!isPlaying)}>
-              {!isPlaying && <Play size={80} strokeWidth={1} fill="white" className="text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.5)] animate-in zoom-in duration-300" />}
+              {!isPlaying && <Play size={100} strokeWidth={1} fill="white" className="text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.6)] animate-in zoom-in duration-300" />}
             </div>
-            <button onClick={(e) => { e.stopPropagation(); setIsMuted(!isMuted); }} className="absolute bottom-8 right-8 p-4 bg-black/40 hover:bg-black/70 rounded-full text-white backdrop-blur-xl border border-white/10 transition-all active:scale-90">
+            <button onClick={(e) => { e.stopPropagation(); setIsMuted(!isMuted); }} className="absolute bottom-8 right-8 p-4 md:p-5 bg-black/40 hover:bg-black/70 rounded-full text-white backdrop-blur-xl border border-white/10 transition-all active:scale-90 z-20">
               {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
             </button>
           </div>
         </FadeInSection>
 
-        <FadeInSection delay="400ms" className="lg:col-span-3">
-          <div className="flex flex-col gap-5 h-full pt-2">
-            <p className="text-xs tracking-[0.4em] font-bold text-orange-400 mb-4 uppercase opacity-80 border-b border-white/10 pb-4">
+        <FadeInSection delay="400ms" className="lg:col-span-3 w-full">
+          <div className="flex flex-col gap-5 h-full pt-4">
+            <p className="text-xs md:text-sm tracking-[0.4em] font-bold text-orange-400 mb-4 uppercase opacity-80 border-b border-white/10 pb-4">
               CORE CASE STUDIES
             </p>
             {PORTFOLIO_DATA.videos.map(v => (
               <button 
                 key={v.id} 
                 onClick={() => handleVideoChange(v)}
-                className={`flex items-center gap-5 p-5 rounded-3xl border transition-all duration-500 ${currentVideo.id === v.id ? 'bg-gradient-to-r from-pink-900/20 to-black border-pink-500/40 shadow-[0_10px_30px_rgba(236,72,153,0.15)] translate-x-2' : 'bg-black/20 border-white/5 hover:bg-white/10 hover:border-white/20'}`}
+                className={`flex items-center gap-5 p-4 md:p-5 rounded-3xl border transition-all duration-500 w-full ${currentVideo.id === v.id ? 'bg-gradient-to-r from-pink-900/20 to-black border-pink-500/40 shadow-[0_10px_30px_rgba(236,72,153,0.15)] md:translate-x-2' : 'bg-black/20 border-white/5 hover:bg-white/10 hover:border-white/20'}`}
               >
                 <div className="w-24 h-14 rounded-xl overflow-hidden shrink-0 border border-white/10 shadow-lg"><img src={v.thumbnail} className="w-full h-full object-cover" /></div>
-                <div className="flex flex-col items-start gap-1">
-                  <span className={`text-sm font-bold uppercase truncate tracking-wider ${currentVideo.id === v.id ? 'text-pink-400' : 'text-gray-300'}`}>{v.title}</span>
-                  <span className="text-[9px] font-mono text-gray-500 uppercase tracking-widest">{currentVideo.id === v.id ? 'NOW PLAYING' : 'CLICK TO VIEW'}</span>
+                <div className="flex flex-col items-start gap-1 overflow-hidden">
+                  <span className={`text-sm font-bold uppercase truncate w-full text-left tracking-wider ${currentVideo.id === v.id ? 'text-pink-400' : 'text-gray-300'}`}>{v.title}</span>
+                  <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">{currentVideo.id === v.id ? 'NOW PLAYING' : 'CLICK TO VIEW'}</span>
                 </div>
               </button>
             ))}
@@ -231,29 +229,26 @@ const MusicSection = () => {
   }, [isPlaying, currentTrack]);
 
   return (
-    <section id="music" className="min-h-screen py-40 px-4 flex flex-col items-center relative overflow-hidden">
+    <section id="music" className="min-h-screen py-40 px-4 md:px-12 flex flex-col items-center relative overflow-hidden">
       <audio ref={audioRef} src={currentTrack.url} onEnded={() => setIsPlaying(false)} />
       
-      <FadeInSection>
-        <h2 className="text-5xl md:text-8xl font-light italic tracking-tight text-white/95 mb-24 text-center uppercase drop-shadow-2xl">AI 音乐制作</h2>
+      <FadeInSection className="w-full flex justify-center">
+        <h2 className="text-5xl md:text-[6rem] font-light italic tracking-tight text-white/95 mb-24 text-center uppercase drop-shadow-2xl">AI 音乐制作</h2>
       </FadeInSection>
 
-      {/* 【优化点】：大幅度增加间距和封面尺寸，提升高级感 */}
-      <div className="max-w-[90vw] 2xl:max-w-[1400px] w-full grid grid-cols-1 lg:grid-cols-12 gap-20 lg:gap-32 items-center relative z-10">
+      <div className="max-w-[1600px] w-full grid grid-cols-1 lg:grid-cols-12 gap-20 lg:gap-24 items-center relative z-10">
         
-        <div className={`lg:col-span-5 flex flex-col items-center text-center transition-all duration-700 ${isTransitioning ? 'opacity-0 scale-[0.95]' : 'opacity-100 scale-100'}`}>
-          {/* 封面放大至 lg:w-[500px] */}
-          <div className={`w-72 h-72 md:w-[400px] md:h-[400px] lg:w-[480px] lg:h-[480px] rounded-full overflow-hidden border-4 border-white/5 shadow-[0_0_100px_rgba(236,72,153,0.15)] transition-all duration-1000 ${isPlaying ? 'scale-105 shadow-cyan-500/20 rotate-slow' : 'scale-100 rotate-0 grayscale-[20%]'}`}>
+        <div className={`lg:col-span-5 flex flex-col items-center text-center transition-all duration-700 w-full ${isTransitioning ? 'opacity-0 scale-[0.95]' : 'opacity-100 scale-100'}`}>
+          <div className={`w-72 h-72 md:w-[450px] md:h-[450px] rounded-full overflow-hidden border-4 border-white/5 shadow-[0_0_100px_rgba(236,72,153,0.15)] transition-all duration-1000 ${isPlaying ? 'scale-105 shadow-cyan-500/20 rotate-slow' : 'scale-100 rotate-0 grayscale-[20%]'}`}>
             <img src={currentTrack.cover} className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-black/10 rounded-full" />
-            {/* 模拟黑胶中心 */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-zinc-900 rounded-full border-4 border-black/50 shadow-inner flex items-center justify-center">
-              <div className="w-4 h-4 bg-black rounded-full" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-zinc-900 rounded-full border-4 border-black/50 shadow-inner flex items-center justify-center">
+              <div className="w-5 h-5 bg-black rounded-full" />
             </div>
           </div>
           
           <h3 className="text-4xl md:text-5xl font-light italic mt-16 text-white uppercase tracking-widest">{currentTrack.title}</h3>
-          <p className="text-cyan-400 text-xs tracking-[0.8em] font-bold mt-4 uppercase">{currentTrack.artist}</p>
+          <p className="text-cyan-400 text-xs md:text-sm tracking-[0.8em] font-bold mt-4 uppercase">{currentTrack.artist}</p>
           
           <div className="flex justify-center mt-12">
             <button onClick={() => setIsPlaying(!isPlaying)} className="w-24 h-24 rounded-full bg-white text-black flex items-center justify-center hover:scale-110 active:scale-90 transition-all shadow-[0_15px_30px_rgba(255,255,255,0.2)]">
@@ -262,25 +257,25 @@ const MusicSection = () => {
           </div>
         </div>
 
-        <div className="lg:col-span-7 bg-black/30 backdrop-blur-3xl p-8 md:p-14 rounded-[3rem] border border-white/5 shadow-[0_30px_80px_rgba(0,0,0,0.5)]">
-          <p className="text-xs tracking-[0.4em] font-bold text-cyan-400 mb-10 uppercase border-b border-white/10 pb-6">Tracklist</p>
+        <div className="lg:col-span-7 bg-black/30 backdrop-blur-3xl p-8 md:p-16 rounded-[3rem] border border-white/5 shadow-[0_30px_80px_rgba(0,0,0,0.5)] w-full">
+          <p className="text-xs md:text-sm tracking-[0.4em] font-bold text-cyan-400 mb-10 uppercase border-b border-white/10 pb-6">Tracklist</p>
           <div className="space-y-4">
             {PORTFOLIO_DATA.music.map((m, idx) => (
               <div 
                 key={m.id} 
                 onClick={() => handleTrackChange(m)}
-                className={`group flex items-center justify-between p-6 md:p-8 rounded-3xl cursor-pointer transition-all duration-500 ${currentTrack.id === m.id ? 'bg-gradient-to-r from-cyan-900/20 to-black border border-cyan-500/30 shadow-2xl scale-[1.02]' : 'bg-white/5 border border-transparent hover:bg-white/10 hover:border-white/10'}`}
+                className={`group flex items-center justify-between p-6 md:p-8 rounded-3xl cursor-pointer transition-all duration-500 w-full ${currentTrack.id === m.id ? 'bg-gradient-to-r from-cyan-900/20 to-black border border-cyan-500/30 shadow-2xl scale-[1.02]' : 'bg-white/5 border border-transparent hover:bg-white/10 hover:border-white/10'}`}
               >
                 <div className="flex items-center gap-8 md:gap-12">
-                  <span className={`text-xl md:text-2xl font-light italic transition-opacity ${currentTrack.id === m.id ? 'opacity-80 text-cyan-400' : 'opacity-20 text-white'}`}>0{idx + 1}</span>
-                  <span className={`text-base md:text-xl font-bold uppercase tracking-[0.2em] ${currentTrack.id === m.id ? 'text-white' : 'text-gray-400 group-hover:text-white'}`}>{m.title}</span>
+                  <span className={`text-2xl md:text-3xl font-light italic transition-opacity ${currentTrack.id === m.id ? 'opacity-80 text-cyan-400' : 'opacity-20 text-white'}`}>0{idx + 1}</span>
+                  <span className={`text-lg md:text-xl font-bold uppercase tracking-[0.2em] ${currentTrack.id === m.id ? 'text-white' : 'text-gray-400 group-hover:text-white'}`}>{m.title}</span>
                 </div>
                 {currentTrack.id === m.id && isPlaying ? (
-                  <div className="flex gap-1.5 h-6 items-end">
-                    {[1,2,3,4,5].map(i => <div key={i} className="w-1.5 bg-cyan-400 rounded-t-sm animate-pulse" style={{ height: `${Math.random()*20 + 8}px`, animationDelay: `${i*0.15}s` }} />)}
+                  <div className="flex gap-1.5 h-8 items-end shrink-0">
+                    {[1,2,3,4,5].map(i => <div key={i} className="w-1.5 bg-cyan-400 rounded-t-sm animate-pulse" style={{ height: `${Math.random()*24 + 8}px`, animationDelay: `${i*0.15}s` }} />)}
                   </div>
                 ) : (
-                  <MusicIcon size={20} className={`transition-opacity ${currentTrack.id === m.id ? 'opacity-50 text-cyan-400' : 'opacity-0 group-hover:opacity-20'}`} />
+                  <MusicIcon size={24} className={`shrink-0 transition-opacity ${currentTrack.id === m.id ? 'opacity-50 text-cyan-400' : 'opacity-0 group-hover:opacity-20'}`} />
                 )}
               </div>
             ))}
@@ -297,7 +292,6 @@ const ShortsCard = ({ v, platform }) => {
   const videoRef = useRef(null);
 
   return (
-    // 【优化点】：大幅度提升单卡片尺寸，最高可达 450px 宽，配合更大的间距展现巨物感
     <div className="w-full max-w-[450px] mx-auto mb-40 last:mb-0">
       <div className="flex justify-between items-end mb-6 px-4">
         <span className="text-xs md:text-sm tracking-[0.5em] font-black text-orange-400 uppercase">{platform}</span>
@@ -433,7 +427,6 @@ export default function App() {
         </section>
 
         <section id="contact" className="min-h-screen py-40 flex flex-col items-center justify-center px-6 relative">
-          {/* 联系页专享深色渐变托底 */}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/80 to-black pointer-events-none" />
           
           <FadeInSection className="relative z-10 w-full max-w-[1400px]">
