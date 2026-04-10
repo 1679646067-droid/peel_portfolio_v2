@@ -185,7 +185,7 @@ const VideoSection = () => {
         <FadeInSection delay="400ms" className="lg:col-span-3 w-full">
           <div className="flex flex-col gap-5 h-full pt-4">
             <p className="text-xs md:text-sm tracking-[0.4em] font-bold text-orange-400 mb-4 uppercase opacity-80 border-b border-white/10 pb-4">
-              CORE CASE STUDIES
+              AIGC作品还在创作中 敬请期待｜目前展示影视混剪
             </p>
             {PORTFOLIO_DATA.videos.map(v => (
               <button 
