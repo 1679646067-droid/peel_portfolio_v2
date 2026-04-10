@@ -60,7 +60,7 @@ const FadeInSection = ({ children, delay = "0ms" }) => {
   return (
     <div 
       ref={domRef} 
-      className={`transition-all duration-[1000ms] ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+      className={`transition-all duration-[1200ms] ease-[cubic-bezier(0.25,1,0.5,1)] ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`}
       style={{ transitionDelay: delay }}
     >
       {children}
@@ -106,11 +106,11 @@ const CustomCursor = () => {
     <>
       <div 
         ref={cursorRef}
-        className={`fixed top-0 left-0 w-10 h-10 pointer-events-none z-[9999] rounded-full border border-orange-400/50 mix-blend-screen transition-all duration-150 ease-out hidden md:block ${isHovering ? 'scale-150 border-pink-500 bg-pink-500/10' : 'scale-100'}`} 
+        className={`fixed top-0 left-0 w-10 h-10 pointer-events-none z-[9999] rounded-full border border-cyan-400/50 mix-blend-screen transition-all duration-300 ease-out hidden md:block ${isHovering ? 'scale-[2] border-pink-500 bg-pink-500/10' : 'scale-100'}`} 
       />
       <div 
         ref={dotRef}
-        className="fixed top-0 left-0 w-1.5 h-1.5 bg-cyan-400 rounded-full mix-blend-screen pointer-events-none z-[9999] hidden md:block" 
+        className="fixed top-0 left-0 w-1.5 h-1.5 bg-white rounded-full mix-blend-screen pointer-events-none z-[9999] hidden md:block shadow-[0_0_10px_#fff]" 
       />
     </>
   );
@@ -125,15 +125,15 @@ const Navbar = ({ activeSection }) => {
     { id: 'contact', label: '联系', icon: User },
   ];
   return (
-    <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2 md:px-6 md:py-3 rounded-full bg-black/40 backdrop-blur-3xl border border-white/5 flex items-center gap-2 md:gap-4 shadow-2xl">
+    <nav className="fixed top-8 left-1/2 -translate-x-1/2 z-50 px-5 py-3 md:px-8 md:py-4 rounded-full bg-black/50 backdrop-blur-3xl border border-white/10 flex items-center gap-3 md:gap-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
       {tabs.map(tab => (
         <button
           key={tab.id}
           onClick={() => document.getElementById(tab.id)?.scrollIntoView({ behavior: 'smooth' })}
-          className={`flex items-center gap-2 transition-all px-3 py-2 md:px-5 md:py-2.5 rounded-full whitespace-nowrap ${activeSection === tab.id ? 'text-pink-400 bg-pink-500/10' : 'text-gray-400 hover:text-white'}`}
+          className={`flex items-center gap-2 transition-all px-4 py-2.5 md:px-6 md:py-3 rounded-full whitespace-nowrap active:scale-95 ${activeSection === tab.id ? 'text-pink-400 bg-pink-500/15 shadow-[inset_0_0_20px_rgba(236,72,153,0.1)]' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
         >
-          <tab.icon size={14} className="shrink-0" />
-          <span className="text-[10px] md:text-[11px] tracking-widest font-bold uppercase">{tab.label}</span>
+          <tab.icon size={16} className="shrink-0" />
+          <span className="text-[11px] md:text-xs tracking-[0.2em] font-bold uppercase">{tab.label}</span>
         </button>
       ))}
     </nav>
@@ -155,7 +155,7 @@ const VideoSection = () => {
       setCurrentVideo(v);
       setIsTransitioning(false);
       setIsPlaying(true);
-    }, 300);
+    }, 400);
   };
 
   useEffect(() => {
@@ -163,40 +163,43 @@ const VideoSection = () => {
   }, [isPlaying, currentVideo]);
 
   return (
-    <section id="video" className="min-h-screen pt-32 pb-20 px-4 flex flex-col items-center relative z-10">
+    <section id="video" className="min-h-screen pt-40 pb-32 px-4 flex flex-col items-center relative z-10">
       <FadeInSection>
-        <h1 className="text-5xl md:text-8xl font-light italic tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-400/80 to-pink-600/80 mb-12 text-center uppercase px-4">
+        <h1 className="text-6xl md:text-[7rem] font-light italic tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-600 mb-16 text-center uppercase px-4 drop-shadow-2xl">
           PEEL 创意工坊
         </h1>
       </FadeInSection>
 
-      <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <FadeInSection delay="200ms">
-          <div className={`lg:col-span-3 aspect-video rounded-[2rem] overflow-hidden border border-white/10 bg-black relative group shadow-2xl transition-all duration-300 ${isTransitioning ? 'opacity-0 scale-[0.98]' : 'opacity-100 scale-100'}`}>
+      {/* 【优化点】：使用 max-w-[1600px] 巨幕容器，采用 12 列网格分配比例 9:3 */}
+      <div className="max-w-[95vw] 2xl:max-w-[1600px] w-full grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+        <FadeInSection delay="200ms" className="lg:col-span-9">
+          <div className={`aspect-video rounded-[2.5rem] overflow-hidden border border-white/10 bg-black relative group shadow-[0_30px_80px_rgba(0,0,0,0.8)] transition-all duration-500 ${isTransitioning ? 'opacity-0 scale-[0.98] blur-sm' : 'opacity-100 scale-100 blur-none'}`}>
             <video ref={videoRef} key={currentVideo.url} src={currentVideo.url} className="w-full h-full object-cover" muted={isMuted} loop playsInline />
             <div className="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/30 transition-all cursor-pointer" onClick={() => setIsPlaying(!isPlaying)}>
-              {!isPlaying && <Play size={64} strokeWidth={1} fill="white" className="text-white drop-shadow-2xl animate-in zoom-in duration-300" />}
+              {!isPlaying && <Play size={80} strokeWidth={1} fill="white" className="text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.5)] animate-in zoom-in duration-300" />}
             </div>
-            <button onClick={(e) => { e.stopPropagation(); setIsMuted(!isMuted); }} className="absolute bottom-6 right-6 p-3 bg-black/40 rounded-full text-white backdrop-blur-md border border-white/10">
-              {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+            <button onClick={(e) => { e.stopPropagation(); setIsMuted(!isMuted); }} className="absolute bottom-8 right-8 p-4 bg-black/40 hover:bg-black/70 rounded-full text-white backdrop-blur-xl border border-white/10 transition-all active:scale-90">
+              {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
             </button>
           </div>
         </FadeInSection>
 
-        {/* --- 这里是你要修改的“精选作品”文案位置 --- */}
-        <FadeInSection delay="400ms">
-          <div className="flex flex-col gap-4">
-            <p className="text-[10px] tracking-[0.3em] font-bold text-orange-400 mb-2 uppercase opacity-60">
-              AIGC作品还在创作中 敬请期待 / 目前展示影视混剪作品
+        <FadeInSection delay="400ms" className="lg:col-span-3">
+          <div className="flex flex-col gap-5 h-full pt-2">
+            <p className="text-xs tracking-[0.4em] font-bold text-orange-400 mb-4 uppercase opacity-80 border-b border-white/10 pb-4">
+              CORE CASE STUDIES
             </p>
             {PORTFOLIO_DATA.videos.map(v => (
               <button 
                 key={v.id} 
                 onClick={() => handleVideoChange(v)}
-                className={`flex items-center gap-4 p-4 rounded-2xl border transition-all duration-300 ${currentVideo.id === v.id ? 'bg-pink-900/10 border-pink-500/30 scale-105' : 'bg-white/5 border-transparent hover:bg-white/10 hover:border-white/20'}`}
+                className={`flex items-center gap-5 p-5 rounded-3xl border transition-all duration-500 ${currentVideo.id === v.id ? 'bg-gradient-to-r from-pink-900/20 to-black border-pink-500/40 shadow-[0_10px_30px_rgba(236,72,153,0.15)] translate-x-2' : 'bg-black/20 border-white/5 hover:bg-white/10 hover:border-white/20'}`}
               >
-                <div className="w-16 h-10 rounded-lg overflow-hidden shrink-0 border border-white/10"><img src={v.thumbnail} className="w-full h-full object-cover" /></div>
-                <span className={`text-[11px] font-bold uppercase truncate ${currentVideo.id === v.id ? 'text-pink-400' : 'text-gray-400'}`}>{v.title}</span>
+                <div className="w-24 h-14 rounded-xl overflow-hidden shrink-0 border border-white/10 shadow-lg"><img src={v.thumbnail} className="w-full h-full object-cover" /></div>
+                <div className="flex flex-col items-start gap-1">
+                  <span className={`text-sm font-bold uppercase truncate tracking-wider ${currentVideo.id === v.id ? 'text-pink-400' : 'text-gray-300'}`}>{v.title}</span>
+                  <span className="text-[9px] font-mono text-gray-500 uppercase tracking-widest">{currentVideo.id === v.id ? 'NOW PLAYING' : 'CLICK TO VIEW'}</span>
+                </div>
               </button>
             ))}
           </div>
@@ -220,7 +223,7 @@ const MusicSection = () => {
       setCurrentTrack(m);
       setIsTransitioning(false);
       setIsPlaying(true);
-    }, 300);
+    }, 400);
   };
 
   useEffect(() => {
@@ -228,44 +231,56 @@ const MusicSection = () => {
   }, [isPlaying, currentTrack]);
 
   return (
-    <section id="music" className="min-h-screen py-32 px-4 flex flex-col items-center border-t border-white/5 relative overflow-hidden">
+    <section id="music" className="min-h-screen py-40 px-4 flex flex-col items-center relative overflow-hidden">
       <audio ref={audioRef} src={currentTrack.url} onEnded={() => setIsPlaying(false)} />
       
       <FadeInSection>
-        <h2 className="text-4xl md:text-6xl font-light italic tracking-tight text-white/90 mb-20 text-center uppercase">AI 音乐制作</h2>
+        <h2 className="text-5xl md:text-8xl font-light italic tracking-tight text-white/95 mb-24 text-center uppercase drop-shadow-2xl">AI 音乐制作</h2>
       </FadeInSection>
 
-      <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
-        <div className={`flex flex-col items-center text-center transition-all duration-500 ${isTransitioning ? 'opacity-0 translate-x-[-20px]' : 'opacity-100 translate-x-0'}`}>
-          <div className={`w-64 h-64 md:w-80 md:h-80 rounded-[2.5rem] overflow-hidden border-2 border-white/10 shadow-2xl transition-all duration-700 ${isPlaying ? 'scale-105 shadow-pink-500/10' : 'scale-100 rotate-0'}`}>
+      {/* 【优化点】：大幅度增加间距和封面尺寸，提升高级感 */}
+      <div className="max-w-[90vw] 2xl:max-w-[1400px] w-full grid grid-cols-1 lg:grid-cols-12 gap-20 lg:gap-32 items-center relative z-10">
+        
+        <div className={`lg:col-span-5 flex flex-col items-center text-center transition-all duration-700 ${isTransitioning ? 'opacity-0 scale-[0.95]' : 'opacity-100 scale-100'}`}>
+          {/* 封面放大至 lg:w-[500px] */}
+          <div className={`w-72 h-72 md:w-[400px] md:h-[400px] lg:w-[480px] lg:h-[480px] rounded-full overflow-hidden border-4 border-white/5 shadow-[0_0_100px_rgba(236,72,153,0.15)] transition-all duration-1000 ${isPlaying ? 'scale-105 shadow-cyan-500/20 rotate-slow' : 'scale-100 rotate-0 grayscale-[20%]'}`}>
             <img src={currentTrack.cover} className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-black/10 rounded-full" />
+            {/* 模拟黑胶中心 */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-zinc-900 rounded-full border-4 border-black/50 shadow-inner flex items-center justify-center">
+              <div className="w-4 h-4 bg-black rounded-full" />
+            </div>
           </div>
-          <h3 className="text-3xl font-light italic mt-10 text-white uppercase tracking-wider">{currentTrack.title}</h3>
-          <p className="text-cyan-400/80 text-[10px] tracking-[0.5em] font-bold mt-2 uppercase">{currentTrack.artist}</p>
           
-          <div className="flex justify-center gap-10 mt-12">
-            <button onClick={() => setIsPlaying(!isPlaying)} className="w-20 h-20 rounded-full bg-white/90 text-black flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-xl">
-              {isPlaying ? <Pause size={32} /> : <Play size={32} fill="black" className="ml-1" />}
+          <h3 className="text-4xl md:text-5xl font-light italic mt-16 text-white uppercase tracking-widest">{currentTrack.title}</h3>
+          <p className="text-cyan-400 text-xs tracking-[0.8em] font-bold mt-4 uppercase">{currentTrack.artist}</p>
+          
+          <div className="flex justify-center mt-12">
+            <button onClick={() => setIsPlaying(!isPlaying)} className="w-24 h-24 rounded-full bg-white text-black flex items-center justify-center hover:scale-110 active:scale-90 transition-all shadow-[0_15px_30px_rgba(255,255,255,0.2)]">
+              {isPlaying ? <Pause size={36} /> : <Play size={36} fill="black" className="ml-2" />}
             </button>
           </div>
         </div>
 
-        <div className="bg-black/20 backdrop-blur-3xl p-8 rounded-[3rem] border border-white/5">
-          <div className="space-y-3">
+        <div className="lg:col-span-7 bg-black/30 backdrop-blur-3xl p-8 md:p-14 rounded-[3rem] border border-white/5 shadow-[0_30px_80px_rgba(0,0,0,0.5)]">
+          <p className="text-xs tracking-[0.4em] font-bold text-cyan-400 mb-10 uppercase border-b border-white/10 pb-6">Tracklist</p>
+          <div className="space-y-4">
             {PORTFOLIO_DATA.music.map((m, idx) => (
               <div 
                 key={m.id} 
                 onClick={() => handleTrackChange(m)}
-                className={`flex items-center justify-between p-5 rounded-2xl cursor-pointer transition-all duration-300 ${currentTrack.id === m.id ? 'bg-pink-500/10 text-pink-400 border border-pink-500/20' : 'hover:bg-white/5 border border-transparent opacity-60 hover:opacity-100'}`}
+                className={`group flex items-center justify-between p-6 md:p-8 rounded-3xl cursor-pointer transition-all duration-500 ${currentTrack.id === m.id ? 'bg-gradient-to-r from-cyan-900/20 to-black border border-cyan-500/30 shadow-2xl scale-[1.02]' : 'bg-white/5 border border-transparent hover:bg-white/10 hover:border-white/10'}`}
               >
-                <div className="flex items-center gap-6">
-                  <span className="text-sm font-light italic opacity-30">0{idx + 1}</span>
-                  <span className="text-[12px] font-bold uppercase tracking-widest">{m.title}</span>
+                <div className="flex items-center gap-8 md:gap-12">
+                  <span className={`text-xl md:text-2xl font-light italic transition-opacity ${currentTrack.id === m.id ? 'opacity-80 text-cyan-400' : 'opacity-20 text-white'}`}>0{idx + 1}</span>
+                  <span className={`text-base md:text-xl font-bold uppercase tracking-[0.2em] ${currentTrack.id === m.id ? 'text-white' : 'text-gray-400 group-hover:text-white'}`}>{m.title}</span>
                 </div>
-                {currentTrack.id === m.id && isPlaying && (
-                  <div className="flex gap-1">
-                    {[1,2,3,4].map(i => <div key={i} className="w-1 bg-pink-400 animate-pulse" style={{ height: `${Math.random()*12 + 4}px`, animationDelay: `${i*0.1}s` }} />)}
+                {currentTrack.id === m.id && isPlaying ? (
+                  <div className="flex gap-1.5 h-6 items-end">
+                    {[1,2,3,4,5].map(i => <div key={i} className="w-1.5 bg-cyan-400 rounded-t-sm animate-pulse" style={{ height: `${Math.random()*20 + 8}px`, animationDelay: `${i*0.15}s` }} />)}
                   </div>
+                ) : (
+                  <MusicIcon size={20} className={`transition-opacity ${currentTrack.id === m.id ? 'opacity-50 text-cyan-400' : 'opacity-0 group-hover:opacity-20'}`} />
                 )}
               </div>
             ))}
@@ -276,19 +291,21 @@ const MusicSection = () => {
   );
 };
 
-// --- 流媒体竖版展示卡片 ---
+// --- 流媒体展示区 ---
 const ShortsCard = ({ v, platform }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef(null);
 
   return (
-    <div className="w-full max-w-[400px] mx-auto mb-24 last:mb-0">
-      <div className="flex justify-between items-end mb-4 px-2">
-        <span className="text-[10px] tracking-[0.4em] font-black text-orange-400 uppercase">{platform}</span>
-        <span className="text-[10px] font-light italic opacity-40 uppercase">{v.title}</span>
+    // 【优化点】：大幅度提升单卡片尺寸，最高可达 450px 宽，配合更大的间距展现巨物感
+    <div className="w-full max-w-[450px] mx-auto mb-40 last:mb-0">
+      <div className="flex justify-between items-end mb-6 px-4">
+        <span className="text-xs md:text-sm tracking-[0.5em] font-black text-orange-400 uppercase">{platform}</span>
+        <span className="text-[10px] md:text-xs font-light italic opacity-50 uppercase tracking-widest">{v.title}</span>
       </div>
+      
       <div 
-        className="aspect-[9/16] bg-zinc-900/50 rounded-[3rem] border-[4px] border-white/5 overflow-hidden relative shadow-2xl cursor-pointer group" 
+        className="aspect-[9/16] bg-zinc-900/60 rounded-[3.5rem] border-[6px] border-white/5 overflow-hidden relative shadow-[0_40px_100px_-15px_rgba(0,0,0,1)] cursor-pointer group hover:border-white/15 transition-all duration-700 hover:-translate-y-4" 
         onClick={() => { 
           setIsPlaying(!isPlaying); 
           if(videoRef.current) isPlaying ? videoRef.current.pause() : videoRef.current.play();
@@ -296,15 +313,15 @@ const ShortsCard = ({ v, platform }) => {
       >
         <video ref={videoRef} src={v.url} className="w-full h-full object-cover" loop playsInline />
         {!isPlaying && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-all">
-            <div className="w-20 h-20 rounded-full bg-white/5 backdrop-blur-md border border-white/10 flex items-center justify-center">
-              <Play size={32} strokeWidth={1} fill="white" className="text-white ml-1" />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-all duration-500">
+            <div className="w-24 h-24 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center shadow-[0_0_40px_rgba(0,0,0,0.5)] group-hover:scale-110 transition-transform">
+              <Play size={40} strokeWidth={1} fill="white" className="text-white ml-2" />
             </div>
           </div>
         )}
-        <div className="absolute right-6 bottom-16 flex flex-col gap-6 text-white bg-black/20 p-5 rounded-full backdrop-blur-xl border border-white/5">
-          <div className="flex flex-col items-center gap-1 group-hover:scale-110 transition-transform"><Heart size={20} className={v.likes !== '-' ? 'text-pink-500' : 'text-white'} fill={v.likes !== '-' ? 'currentColor' : 'none'} /><span className="text-[10px] font-black">{v.likes}</span></div>
-          <div className="flex flex-col items-center gap-1 group-hover:scale-110 transition-transform"><MessageCircle size={20} /><span className="text-[10px] font-black">{v.shares}</span></div>
+        <div className="absolute right-8 bottom-20 flex flex-col gap-8 text-white bg-black/30 p-6 rounded-full backdrop-blur-2xl border border-white/10 shadow-2xl">
+          <div className="flex flex-col items-center gap-1.5 group-hover:scale-110 transition-transform"><Heart size={26} className={v.likes !== '-' ? 'text-pink-500' : 'text-white'} fill={v.likes !== '-' ? 'currentColor' : 'none'} /><span className="text-[11px] font-black">{v.likes}</span></div>
+          <div className="flex flex-col items-center gap-1.5 group-hover:scale-110 transition-transform"><MessageCircle size={26} /><span className="text-[11px] font-black">{v.shares}</span></div>
         </div>
       </div>
     </div>
@@ -331,11 +348,13 @@ const ContactButton = ({ icon: Icon, value }) => {
   return (
     <button 
       onClick={handleCopy} 
-      className={`px-10 py-6 bg-black/20 rounded-3xl border border-white/10 flex items-center gap-5 transition-all duration-500 group active:scale-95 shadow-2xl relative ${copied ? 'border-green-500/50 bg-green-500/5' : 'hover:bg-white hover:text-black hover:scale-105'}`}
+      className={`px-12 py-8 bg-black/30 rounded-[2.5rem] border border-white/10 flex flex-col items-center gap-6 transition-all duration-500 group active:scale-95 shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden ${copied ? 'border-green-500/50 bg-green-500/10' : 'hover:bg-white hover:text-black hover:scale-[1.03]'}`}
     >
-      {copied ? <Check size={20} className="text-green-500" /> : <Icon size={20} />}
-      <span className={`text-[13px] font-black tracking-widest uppercase ${copied ? 'text-green-500' : ''}`}>
-        {copied ? "已复制" : value}
+      <div className={`w-20 h-20 rounded-full flex items-center justify-center border transition-all duration-500 ${copied ? 'bg-green-500 border-transparent text-white' : 'bg-white/5 border-white/20 group-hover:bg-black group-hover:text-white'}`}>
+        {copied ? <Check size={32} /> : <Icon size={32} strokeWidth={1.5} />}
+      </div>
+      <span className={`text-base font-black tracking-widest uppercase ${copied ? 'text-green-500' : ''}`}>
+        {copied ? "COPIED" : value}
       </span>
     </button>
   );
@@ -367,18 +386,20 @@ export default function App() {
   return (
     <div className="text-white font-sans selection:bg-pink-500/30 selection:text-white relative min-h-screen overflow-x-hidden bg-black">
       
+      {/* 视差滚动底层 */}
       <div 
         className="fixed inset-[-10%] z-0 bg-cover bg-center bg-no-repeat pointer-events-none will-change-transform" 
         style={{ 
           backgroundImage: `url(${PORTFOLIO_DATA.backgroundImage})`,
-          transform: `translate3d(0, ${-backgroundY}px, 0) scale(1.1)`,
+          transform: `translate3d(0, ${-backgroundY}px, 0) scale(1.15)`,
         }}
       >
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-[1px]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/20 to-black" />
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/40 to-black" />
         
-        <div className="absolute top-[20%] left-[-10%] w-[50%] h-[50%] bg-pink-500/10 rounded-full blur-[150px] animate-pulse" />
-        <div className="absolute bottom-[20%] right-[-10%] w-[50%] h-[50%] bg-cyan-500/10 rounded-full blur-[150px] animate-pulse" style={{ animationDelay: '2s' }} />
+        {/* 巨型氛围光晕 */}
+        <div className="absolute top-[10%] left-[-20%] w-[60%] h-[60%] bg-pink-600/10 rounded-full blur-[200px] animate-pulse" />
+        <div className="absolute bottom-[10%] right-[-20%] w-[60%] h-[60%] bg-cyan-600/10 rounded-full blur-[200px] animate-pulse" style={{ animationDelay: '3s' }} />
       </div>
 
       <CustomCursor />
@@ -386,17 +407,23 @@ export default function App() {
 
       <main className="relative z-10">
         <VideoSection />
+        
+        {/* 增加板块间的分割留白 */}
+        <div className="h-24 w-full" />
+        
         <MusicSection />
 
-        <section id="shorts" className="py-32 px-6 flex flex-col items-center border-t border-white/5">
+        <div className="h-24 w-full" />
+
+        <section id="shorts" className="py-40 px-6 flex flex-col items-center">
           <FadeInSection>
-            <div className="text-center mb-32">
-              <h2 className="text-4xl md:text-7xl font-light italic tracking-tight uppercase mb-4 text-white/90">流媒体作品展示</h2>
-              <p className="text-cyan-400/70 text-xs tracking-[0.5em] font-bold uppercase opacity-60">Vertical Content Gallery</p>
+            <div className="text-center mb-40">
+              <h2 className="text-5xl md:text-[6rem] font-light italic tracking-tight uppercase mb-6 text-white/95 drop-shadow-xl">流媒体作品</h2>
+              <p className="text-cyan-400/80 text-sm tracking-[0.6em] font-bold uppercase opacity-80">Vertical Content Gallery</p>
             </div>
           </FadeInSection>
           
-          <div className="flex flex-col w-full max-w-2xl">
+          <div className="flex flex-col w-full max-w-4xl">
             {PORTFOLIO_DATA.shorts.map((s, idx) => (
               <FadeInSection key={s.id} delay={`${idx * 100}ms`}>
                 <ShortsCard v={s} platform={s.platform} />
@@ -405,18 +432,23 @@ export default function App() {
           </div>
         </section>
 
-        <section id="contact" className="min-h-screen py-32 flex flex-col items-center justify-center px-6 border-t border-white/5 relative">
-          <FadeInSection>
-            <div className="text-center space-y-6">
-              <h2 className="text-7xl md:text-9xl font-light italic uppercase tracking-tighter leading-none opacity-90">LET'S <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500/80 to-orange-500/80">CREATE.</span></h2>
-              <div className="flex flex-col md:flex-row gap-6 mt-16 justify-center">
+        <section id="contact" className="min-h-screen py-40 flex flex-col items-center justify-center px-6 relative">
+          {/* 联系页专享深色渐变托底 */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/80 to-black pointer-events-none" />
+          
+          <FadeInSection className="relative z-10 w-full max-w-[1400px]">
+            <div className="text-center space-y-12">
+              <h2 className="text-[5rem] md:text-[10rem] font-light italic uppercase tracking-tighter leading-none opacity-95 drop-shadow-2xl">
+                LET'S <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-orange-400">CREATE.</span>
+              </h2>
+              <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 mt-24 justify-center items-stretch">
                 <ContactButton icon={Mail} value={PORTFOLIO_DATA.contact.email} />
                 <ContactButton icon={Phone} value={PORTFOLIO_DATA.contact.phone} />
                 <ContactButton icon={Send} value={PORTFOLIO_DATA.contact.wechat} />
               </div>
             </div>
           </FadeInSection>
-          <div className="absolute bottom-10 opacity-20 text-[10px] tracking-[0.5em] text-center w-full px-4 font-bold uppercase">{LEGAL_NOTICE}</div>
+          <div className="absolute bottom-12 opacity-20 text-xs tracking-[0.5em] text-center w-full px-4 font-bold uppercase relative z-10 mt-32">{LEGAL_NOTICE}</div>
         </section>
       </main>
 
@@ -437,24 +469,33 @@ export default function App() {
         }
 
         section {
-          scroll-margin-top: 100px;
+          scroll-margin-top: 120px;
+        }
+
+        .rotate-slow {
+          animation: rotate 25s linear infinite;
+        }
+
+        @keyframes rotate {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
 
         .animate-in {
-          animation: animate-in 0.5s ease-out forwards;
+          animation: animate-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes animate-in {
-          from { opacity: 0; transform: scale(0.9) translateY(10px); }
+          from { opacity: 0; transform: scale(0.8) translateY(20px); }
           to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         @keyframes pulse {
-          0%, 100% { opacity: 0.1; transform: scale(1); }
-          50% { opacity: 0.3; transform: scale(1.2); }
+          0%, 100% { opacity: 0.15; transform: scale(1); }
+          50% { opacity: 0.35; transform: scale(1.15); }
         }
         .animate-pulse {
-          animation: pulse 8s ease-in-out infinite;
+          animation: pulse 10s ease-in-out infinite;
         }
       `}</style>
     </div>
