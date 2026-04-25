@@ -18,7 +18,7 @@ const PORTFOLIO_DATA = {
     phone: "+86 14775909812", 
   },
   videos: [
-    { id: 1, title: "星球大战混剪", url: "https://github.com/1679646067-droid/-/raw/refs/heads/main/166.MP4", thumbnail: "https://github.com/1679646067-droid/-/blob/main/IMG_0986.JPG?raw=true" },
+    { id: 1, title: "TOXIC MV 部分片段", url: "https://github.com/1679646067-droid/peel/raw/refs/heads/main/网页上传.mp4", thumbnail: "https://github.com/1679646067-droid/-/blob/main/IMG_0986.JPG?raw=true" },
     { id: 2, title: "AI Rebirth", url: "https://www.w3schools.com/html/movie.mp4", thumbnail: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1000" }
   ],
   music: [
