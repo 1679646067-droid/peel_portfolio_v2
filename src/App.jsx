@@ -30,7 +30,7 @@ const PORTFOLIO_DATA = {
   shorts: [
     { id: 101, platform: "抖音", likes: "116.0w", shares: "2.7w", title: "体育类VLOG", url: "https://github.com/1679646067-droid/peel/raw/refs/heads/main/扣篮.mp4" },
     { id: 102, platform: "抖音", likes: "42.1w", shares: "4374", title: "体育类剧情", url: "https://github.com/1679646067-droid/peel/raw/refs/heads/main/剧情.mp4" },
-    { id: 201, platform: "小红书", likes: "3.5k", shares: "776", title: "出海营销案例", url: "https://github.com/1679646067-droid/peel/raw/refs/heads/main/小红书%202.MP4" },
+    { id: 201, platform: "小红书", likes: "25w", shares: "776", title: "出海营销案例", url: "https://github.com/1679646067-droid/peel/raw/refs/heads/main/喷香槟.mp4" },
     { id: 202, platform: "小红书", likes: "24k", shares: "86", title: "toc产品介绍视频", url: "https://github.com/1679646067-droid/peel/raw/refs/heads/main/小蜜蜂慕斯卡托.mp4" },
     { id: 301, platform: "视频号", likes: "-", shares: "-", title: "MG动画展示商业案例", url: "https://github.com/1679646067-droid/peel/raw/refs/heads/main/录音笔.mp4" },
     { id: 302, platform: "视频号", likes: "-", shares: "-", title: "实录活动VLOG", url: "https://github.com/1679646067-droid/peel/raw/refs/heads/main/北京晚宴.mp4" }
